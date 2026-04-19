@@ -8,14 +8,25 @@ window.eventos = {
          {
            "label": "Site EXEMPLO IFSP",
            "url": "https://www.ifsp.edu.br/",
-           "type": "link"
          },
          {
            "label": "Araras",
-           "url": "arquivos/araras.jpg",
-          
+           "url": "arquivos/araras.jpg"
          }
       ]
     },
   ]
 };
+
+// Lógica para forçar o recarregamento ao entrar na página ou aba suspensa
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'visible') {
+    window.location.reload();
+  }
+});
+
+window.addEventListener('pageshow', function(event) {
+  if (event.persisted) {
+    window.location.reload();
+  }
+});
