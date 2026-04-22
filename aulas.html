@@ -18,41 +18,44 @@
       --accent-bg: #FDF0E4;
       --accent-dk: #7A3D04;
       --radius: 12px;
-      --shadow: 0 4px 18px rgba(48, 33, 10, 0.06);
+      --shadow: 0 4px 18px rgba(48,33,10,.06);
     }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    
-    header { 
-      background: var(--surface); 
-      border-bottom: 1px solid var(--border); 
-      padding: 18px 32px; 
-      display: flex; 
-      align-items: center; 
-      justify-content: space-between; 
-      position: sticky; 
-      top: 0; 
-      z-index: 10; 
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 10;
     }
-    header h1 { font-family: 'Lora', serif; font-size: 22px; font-weight: 600; color: var(--text); }
+    header h1 { font-family: 'Lora', serif; font-size: 22px; font-weight: 600; }
     header .subtitle { font-size: 13px; color: var(--muted); margin-top: 2px; }
 
     .btn-header-back {
-      text-decoration: none;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      transition: all 0.2s;
+      text-decoration: none; color: var(--muted); font-size: 13px; font-weight: 500;
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border);
+      transition: all .2s; background: none; cursor: pointer; font-family: inherit;
     }
     .btn-header-back:hover { background: var(--bg); color: var(--text); }
 
-    main { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-    
+    main { max-width: 960px; margin: 0 auto; padding: 40px 20px; }
+
+    /* ── Legend ── */
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 20px;
+    }
+    .legend-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600;
+      padding: 4px 10px; border-radius: 20px;
+      border: 1px solid transparent;
+    }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+    /* ── Table card ── */
     .schedule-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -60,129 +63,175 @@
       box-shadow: var(--shadow);
       overflow: hidden;
     }
-
     .table-responsive { overflow-x: auto; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-    }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
 
     th {
       background: var(--accent-bg);
       color: var(--accent-dk);
       font-family: 'Lora', serif;
-      font-size: 14px;
-      font-weight: 600;
+      font-size: 14px; font-weight: 600;
       padding: 16px;
       border-bottom: 2px solid var(--border);
+      white-space: nowrap;
+      transition: background .2s;
     }
+    th.today-col {
+      background: #FAEBD2;
+      color: var(--accent);
+      position: relative;
+    }
+    th.today-col::after { display: none; }
 
     td {
-      padding: 16px;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--border);
-      font-size: 14px;
+      font-size: 13px;
       vertical-align: top;
+      transition: background .15s;
     }
 
+    /* Time slot cell */
     .time-slot {
-      font-weight: 600;
-      color: var(--muted);
-      width: 100px;
-      background: #fafafa;
-    }
-
-    .subject {
-      display: block;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .teacher {
-      display: block;
+      font-weight: 600; color: var(--muted);
+      width: 108px; min-width: 108px;
+      background: #fafaf8;
       font-size: 12px;
-      color: var(--muted);
+      white-space: nowrap;
     }
+    .time-slot.current-row {
+      background: var(--accent-bg) !important;
+      color: var(--accent);
+    }
+    .now-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 9px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.07em;
+      color: var(--accent);
+      margin-top: 5px;
+    }
+    .now-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--accent);
+      animation: blink 1.5s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* Today column cells */
+    td.today-col { background: #FEFAF4; }
+    tbody tr:hover td { background: #fdfbf7; }
+    tbody tr:hover td.today-col { background: #FCF3E4; }
+
+    /* Subject cell */
+    .subject {
+      display: inline-block;
+      font-weight: 600;
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 2px;
+    }
+    .teacher { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* Subject colors — applied via JS */
+    .subj-ARQART1 { background: #FDE8D8; color: #7A3D04; }
+    .subj-ARQINCP { background: #DBEAFE; color: #1E3A8A; }
+    .subj-ARQLPR1 { background: #D1FAE5; color: #065F46; }
+    .subj-ARQPROG { background: #EDE9FE; color: #4C1D95; }
+    .subj-ARQGEO1 { background: #CCFBF1; color: #134E4A; }
+    .subj-ARQING1 { background: #FEF3C7; color: #92400E; }
+    .subj-ARQEFI1 { background: #FFE4E6; color: #881337; }
+    .subj-ARQIWB1 { background: #E0E7FF; color: #312E81; }
+    .subj-ARQMAT1 { background: #FCE7F3; color: #831843; }
+    .subj-ARQFIS1 { background: #E0F2FE; color: #0C4A6E; }
+    .subj-ARQFIL1 { background: #FEF9C3; color: #713F12; }
 
     footer { text-align: center; padding: 40px 20px; font-size: 12px; color: var(--muted); }
+
+    @media (max-width: 640px) {
+      header { padding: 16px; }
+      main { padding: 24px 12px; }
+    }
   </style>
 </head>
 <body>
   <header>
     <div>
       <h1>Horários de Aulas</h1>
-      <div class="subtitle">Grade semanal de disciplinas</div>
+      <div class="subtitle">Grade semanal de disciplinas — 1INFO-2</div>
     </div>
-    <div style="display: flex; gap: 10px;">
-      <button id="export-pdf" class="btn-header-back" style="cursor: pointer; background: var(--accent); color: white; border-color: var(--accent);">Exportar Grade</button>
-      <a href="index.html" class="btn-header-back">← Voltar ao Portal</a>
+    <div style="display:flex;gap:10px;">
+      <button id="export-pdf" class="btn-header-back" style="background:var(--accent);color:white;border-color:var(--accent);">⬇ Exportar Grade</button>
+      <a href="index.html" class="btn-header-back">← Voltar</a>
     </div>
   </header>
 
   <main>
+    <!-- Color legend -->
+    <div class="legend" id="legend"></div>
+
     <div class="schedule-card">
       <div class="table-responsive">
-        <table>
+        <table id="schedule-table">
           <thead>
             <tr>
               <th>Vespertino</th>
-              <th>Segunda</th>
-              <th>Terça</th>
-              <th>Quarta</th>
-              <th>Quinta</th>
-              <th>Sexta</th>
+              <th data-dow="1">Segunda</th>
+              <th data-dow="2">Terça</th>
+              <th data-dow="3">Quarta</th>
+              <th data-dow="4">Quinta</th>
+              <th data-dow="5">Sexta</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td class="time-slot">12:35 - 13:25</td>
-              <td><span class="subject">INT.14117 (ARQART1)</span></td>
-              <td><span class="subject">INT.14144 (ARQINCP)</span></td>
+            <tr data-start="12:35" data-end="13:25">
+              <td class="time-slot">12:35 – 13:25</td>
+              <td><span class="subject" data-code="ARQART1">INT.14117 (ARQART1)</span></td>
+              <td><span class="subject" data-code="ARQINCP">INT.14144 (ARQINCP)</span></td>
               <td></td>
-              <td><span class="subject">INT.14119 (ARQLPR1)</span></td>
-              <td><span class="subject">INT.14143 (ARQPROG)</span></td>
+              <td><span class="subject" data-code="ARQLPR1">INT.14119 (ARQLPR1)</span></td>
+              <td><span class="subject" data-code="ARQPROG">INT.14143 (ARQPROG)</span></td>
             </tr>
-            <tr>
-              <td class="time-slot">13:25 - 14:15</td>
-              <td><span class="subject">INT.14117 (ARQART1)</span></td>
-              <td><span class="subject">INT.14144 (ARQINCP)</span></td>
+            <tr data-start="13:25" data-end="14:15">
+              <td class="time-slot">13:25 – 14:15</td>
+              <td><span class="subject" data-code="ARQART1">INT.14117 (ARQART1)</span></td>
+              <td><span class="subject" data-code="ARQINCP">INT.14144 (ARQINCP)</span></td>
               <td></td>
-              <td><span class="subject">INT.14119 (ARQLPR1)</span></td>
-              <td><span class="subject">INT.14143 (ARQPROG)</span></td>
+              <td><span class="subject" data-code="ARQLPR1">INT.14119 (ARQLPR1)</span></td>
+              <td><span class="subject" data-code="ARQPROG">INT.14143 (ARQPROG)</span></td>
             </tr>
-            <tr>
-              <td class="time-slot">14:25 - 15:15</td>
-              <td><span class="subject">INT.14124 (ARQGEO1)</span></td>
-              <td><span class="subject">INT.14120 (ARQING1)</span></td>
-              <td><span class="subject">INT.14118 (ARQEFI1)</span></td>
-              <td><span class="subject">INT.14122 (ARQIWB1)</span></td>
-              <td><span class="subject">INT.14143 (ARQPROG)</span></td>
+            <tr data-start="14:25" data-end="15:15">
+              <td class="time-slot">14:25 – 15:15</td>
+              <td><span class="subject" data-code="ARQGEO1">INT.14124 (ARQGEO1)</span></td>
+              <td><span class="subject" data-code="ARQING1">INT.14120 (ARQING1)</span></td>
+              <td><span class="subject" data-code="ARQEFI1">INT.14118 (ARQEFI1)</span></td>
+              <td><span class="subject" data-code="ARQIWB1">INT.14122 (ARQIWB1)</span></td>
+              <td><span class="subject" data-code="ARQPROG">INT.14143 (ARQPROG)</span></td>
             </tr>
-            <tr>
-              <td class="time-slot">15:15 - 16:05</td>
-              <td><span class="subject">INT.14124 (ARQGEO1)</span></td>
-              <td><span class="subject">INT.14120 (ARQING1)</span></td>
-              <td><span class="subject">INT.14118 (ARQEFI1)</span></td>
-              <td><span class="subject">INT.14122 (ARQIWB1)</span></td>
-              <td><span class="subject">INT.14143 (ARQPROG)</span></td>
+            <tr data-start="15:15" data-end="16:05">
+              <td class="time-slot">15:15 – 16:05</td>
+              <td><span class="subject" data-code="ARQGEO1">INT.14124 (ARQGEO1)</span></td>
+              <td><span class="subject" data-code="ARQING1">INT.14120 (ARQING1)</span></td>
+              <td><span class="subject" data-code="ARQEFI1">INT.14118 (ARQEFI1)</span></td>
+              <td><span class="subject" data-code="ARQIWB1">INT.14122 (ARQIWB1)</span></td>
+              <td><span class="subject" data-code="ARQPROG">INT.14143 (ARQPROG)</span></td>
             </tr>
-            <tr>
-              <td class="time-slot">16:20 - 17:10</td>
-              <td><span class="subject">INT.14121 (ARQMAT1)</span></td>
-              <td><span class="subject">INT.14123 (ARQFIS1)</span></td>
-              <td><span class="subject">INT.14142 (ARQFIL1)</span></td>
+            <tr data-start="16:20" data-end="17:10">
+              <td class="time-slot">16:20 – 17:10</td>
+              <td><span class="subject" data-code="ARQMAT1">INT.14121 (ARQMAT1)</span></td>
+              <td><span class="subject" data-code="ARQFIS1">INT.14123 (ARQFIS1)</span></td>
+              <td><span class="subject" data-code="ARQFIL1">INT.14142 (ARQFIL1)</span></td>
               <td></td>
-              <td><span class="subject">INT.14121 (ARQMAT1)</span></td>
+              <td><span class="subject" data-code="ARQMAT1">INT.14121 (ARQMAT1)</span></td>
             </tr>
-            <tr>
-              <td class="time-slot">17:10 - 18:00</td>
-              <td><span class="subject">INT.14121 (ARQMAT1)</span></td>
-              <td><span class="subject">INT.14123 (ARQFIS1)</span></td>
-              <td><span class="subject">INT.14142 (ARQFIL1)</span></td>
+            <tr data-start="17:10" data-end="18:00">
+              <td class="time-slot">17:10 – 18:00</td>
+              <td><span class="subject" data-code="ARQMAT1">INT.14121 (ARQMAT1)</span></td>
+              <td><span class="subject" data-code="ARQFIS1">INT.14123 (ARQFIS1)</span></td>
+              <td><span class="subject" data-code="ARQFIL1">INT.14142 (ARQFIL1)</span></td>
               <td></td>
-              <td><span class="subject">INT.14121 (ARQMAT1)</span></td>
+              <td><span class="subject" data-code="ARQMAT1">INT.14121 (ARQMAT1)</span></td>
             </tr>
           </tbody>
         </table>
@@ -192,17 +241,98 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
+    // ── Subject color map ──
+    const SUBJECT_META = {
+      'ARQART1': { label: 'ARQART1', dotBg: '#F97316' },
+      'ARQINCP': { label: 'ARQINCP', dotBg: '#3B82F6' },
+      'ARQLPR1': { label: 'ARQLPR1', dotBg: '#10B981' },
+      'ARQPROG': { label: 'ARQPROG', dotBg: '#8B5CF6' },
+      'ARQGEO1': { label: 'ARQGEO1', dotBg: '#14B8A6' },
+      'ARQING1': { label: 'ARQING1', dotBg: '#F59E0B' },
+      'ARQEFI1': { label: 'ARQEFI1', dotBg: '#F43F5E' },
+      'ARQIWB1': { label: 'ARQIWB1', dotBg: '#6366F1' },
+      'ARQMAT1': { label: 'ARQMAT1', dotBg: '#EC4899' },
+      'ARQFIS1': { label: 'ARQFIS1', dotBg: '#0EA5E9' },
+      'ARQFIL1': { label: 'ARQFIL1', dotBg: '#84CC16' },
+    };
+
+    // ── Apply subject colors ──
+    document.querySelectorAll('.subject[data-code]').forEach(el => {
+      el.classList.add('subj-' + el.dataset.code);
+    });
+
+    // ── Highlight today's column ──
+    const now = new Date();
+    const dow = now.getDay(); // 0=Sun … 6=Sat
+    if (dow >= 1 && dow <= 5) {
+      // Headers
+      document.querySelectorAll('th[data-dow]').forEach(th => {
+        if (Number(th.dataset.dow) === dow) th.classList.add('today-col');
+      });
+      // Body cells: each row's td[dow] (index 0=time, 1=Mon…5=Fri)
+      document.querySelectorAll('tbody tr').forEach(row => {
+        const cells = row.querySelectorAll('td');
+        if (cells[dow]) cells[dow].classList.add('today-col');
+      });
+    }
+
+    // ── Highlight current time row ──
+    function toMins(t) {
+      const [h, m] = t.split(':').map(Number);
+      return h * 60 + m;
+    }
+    const nowMins = now.getHours() * 60 + now.getMinutes();
+
+    document.querySelectorAll('tbody tr[data-start]').forEach(row => {
+      const start = toMins(row.dataset.start);
+      const end = toMins(row.dataset.end);
+      if (nowMins >= start && nowMins < end) {
+        const timeCell = row.querySelector('.time-slot');
+        timeCell.classList.add('current-row');
+        // Add live badge
+        const badge = document.createElement('div');
+        badge.className = 'now-badge';
+        badge.innerHTML = '<div class="now-dot"></div> agora';
+        timeCell.appendChild(badge);
+      }
+    });
+
+    // ── Build legend ──
+    const legendEl = document.getElementById('legend');
+    const seenCodes = new Set();
+    document.querySelectorAll('.subject[data-code]').forEach(el => {
+      const code = el.dataset.code;
+      if (!seenCodes.has(code) && SUBJECT_META[code]) {
+        seenCodes.add(code);
+        const meta = SUBJECT_META[code];
+        const cssClass = 'subj-' + code;
+        // Get computed colors from a temporary element
+        const tmp = document.createElement('span');
+        tmp.className = 'subject ' + cssClass;
+        tmp.style.visibility = 'hidden';
+        tmp.style.position = 'absolute';
+        document.body.appendChild(tmp);
+        const bg = getComputedStyle(tmp).backgroundColor;
+        const color = getComputedStyle(tmp).color;
+        document.body.removeChild(tmp);
+
+        const item = document.createElement('div');
+        item.className = 'legend-item ' + cssClass;
+        item.innerHTML = `<span class="legend-dot" style="background:${meta.dotBg}"></span>${code}`;
+        legendEl.appendChild(item);
+      }
+    });
+
+    // ── Export PDF ──
     document.getElementById('export-pdf').addEventListener('click', () => {
       const element = document.querySelector('.schedule-card');
-      const options = {
+      html2pdf().set({
         margin: 10,
-        filename: 'grade-horaria.pdf',
+        filename: 'grade-horaria-1INFO2.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-      };
-      
-      html2pdf().set(options).from(element).save();
+      }).from(element).save();
     });
   </script>
 </body>

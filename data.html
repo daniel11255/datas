@@ -19,129 +19,155 @@
       --accent-dk: #7A3D04;
       --today-bg: #FDF0E4;
       --link: #1A5FA6;
-      --radius: 10px;
-      --shadow: 0 4px 18px rgba(48, 33, 10, 0.06);
-      --shadow-hover: 0 8px 28px rgba(48, 33, 10, 0.10);
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(48,33,10,.05);
+      --shadow-hover: 0 15px 45px rgba(48,33,10,.12);
     }
     body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; gap: 18px; position: sticky; top: 0; z-index: 10; }
-    header h1 { font-family: 'Lora', serif; font-size: 22px; font-weight: 600; letter-spacing: -0.3px; color: var(--text); }
+    header {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 24px 40px; display: flex; align-items: center; justify-content: space-between; gap: 18px;
+      position: sticky; top: 0; z-index: 10;
+    }
+    header h1 { font-family: 'Lora', serif; font-size: 22px; font-weight: 600; letter-spacing: -.3px; }
     header .subtitle { font-size: 13px; color: var(--muted); margin-top: 2px; }
     .btn-header-back {
-      text-decoration: none;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      transition: all 0.2s;
+      text-decoration: none; color: var(--muted); font-size: 13px; font-weight: 500;
+      display: flex; align-items: center; gap: 6px;
+      padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); transition: all .2s;
     }
     .btn-header-back:hover { background: var(--bg); color: var(--text); }
+
+    /* ── Today's events banner ── */
+    .today-banner {
+      max-width: 800px; margin: 32px auto 0; padding: 0 20px;
+      display: none;
+    }
+    .today-banner.visible { display: block; }
+    .today-banner-inner {
+      background: var(--accent-bg);
+      border: 1px solid #E8C9A0;
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      cursor: pointer; transition: background .15s;
+    }
+    .today-banner-inner:hover { background: #FCE8D0; }
+    .today-banner-left { display: flex; align-items: center; gap: 10px; }
+    .today-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: blink 1.5s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .today-banner-text { font-size: 14px; font-weight: 600; color: var(--accent-dk); }
+    .today-banner-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .today-banner-arrow { color: var(--accent); font-size: 18px; }
+
+    /* ── Filter ── */
     .filter-wrap { position: relative; }
-    .filter-button { border: 1px solid var(--border); background: var(--surface); color: var(--text); border-radius: 999px; padding: 10px 18px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all .2s ease; white-space: nowrap; }
+    .filter-button {
+      border: 1px solid var(--border); background: var(--surface); color: var(--text);
+      border-radius: 999px; padding: 10px 18px; font: inherit; font-size: 13px; font-weight: 600;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+      box-shadow: 0 1px 2px rgba(0,0,0,.05); transition: all .2s ease; white-space: nowrap;
+    }
     .filter-button:hover { transform: translateY(-1px); border-color: #E0B87E; }
-    .filter-button .caret { font-size: 11px; line-height: 1; }
-    .filter-popover { position: absolute; right: 0; top: calc(100% + 10px); width: min(320px, calc(100vw - 32px)); background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow-hover); padding: 12px; z-index: 20; display: none; }
+    .filter-button .caret { font-size: 11px; }
+    .filter-popover {
+      position: absolute; right: 0; top: calc(100% + 10px);
+      width: min(320px, calc(100vw - 32px));
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      box-shadow: var(--shadow-hover); padding: 12px; z-index: 20; display: none;
+    }
     .filter-popover.open { display: block; }
-    .filter-popover h3 { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+    .filter-popover h3 { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
     .month-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .month-option { border: 1px solid var(--border); background: #fff; color: var(--text); border-radius: 10px; padding: 8px 10px; font-size: 12px; font-weight: 600; cursor: pointer; transition: transform .12s ease, border-color .12s ease, background .12s ease; }
+    .month-option {
+      border: 1px solid var(--border); background: #fff; color: var(--text);
+      border-radius: 10px; padding: 8px 10px; font-size: 12px; font-weight: 600;
+      cursor: pointer; transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
     .month-option:hover { transform: translateY(-1px); border-color: #D9CEC0; }
     .month-option.active { background: var(--accent); color: #fff; border-color: var(--accent); }
     .popover-footer { margin-top: 10px; display: flex; gap: 8px; justify-content: space-between; }
     .popover-action { border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 999px; padding: 8px 12px; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; flex: 1; }
-    main { max-width: 800px; margin: 0 auto; padding: 32px 20px; }
-    .cal-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
-    .cal-head { display: flex; flex-direction: column; gap: 14px; padding: 16px 20px 18px; border-bottom: 1px solid var(--border); }
-    .cal-head-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .month-label { font-family: 'Lora', serif; font-size: 20px; font-weight: 600; color: var(--text); line-height: 1.2; }
-    .year-label { font-size: 13px; color: var(--muted); margin-top: 3px; }
-    .results-meta { font-size: 13px; color: var(--muted); line-height: 1.5; max-width: 320px; }
-    .results-meta { display: none; } /* Escondido para dar lugar ao novo banner */
-    
-    .filter-status-banner { background: var(--accent-bg); padding: 32px 24px; text-align: center; border-bottom: 1px solid var(--border); }
-    .status-text { font-family: 'Lora', serif; font-size: 28px; font-weight: 600; color: var(--accent-dk); line-height: 1.2; }
-    .status-subtext { display: block; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--muted); font-weight: 400; margin-top: 8px; text-transform: uppercase; letter-spacing: 0.1em; }
-
-    .groups { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 14px; }
-    .day-card { border: 1px solid var(--border); border-radius: 12px; background: var(--surface); padding: 16px; box-shadow: 0 1px 0 rgba(0,0,0,0.02); transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease; }
-    .day-card:hover { box-shadow: var(--shadow-hover); border-color: #D9CEC0; }
-    .day-card.expanded { border-color: #D9C3A4; }
-    /* Destaque para múltiplos eventos */
-    .day-card.has-multiple { border-left: 4px solid var(--accent); }
-    .multiple-badge { display: inline-block; background: var(--accent); color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-bottom: 6px; }
-    
-    .filter-section-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin: 12px 0 8px; border-top: 1px solid var(--border); padding-top: 12px; }
+    .filter-section-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin: 12px 0 8px; border-top: 1px solid var(--border); padding-top: 12px; }
     .weekday-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .weekday-option { border: 1px solid var(--border); background: #fff; color: var(--text); border-radius: 10px; padding: 8px 10px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all .12s ease; text-align: center; }
     .weekday-option:hover { transform: translateY(-1px); border-color: #D9CEC0; }
     .weekday-option.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-    .weekday-option.full-width { grid-column: span 3; }
 
+    main { max-width: 840px; margin: 0 auto; padding: 48px 20px; }
+    .cal-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+    .cal-head { display: flex; flex-direction: column; gap: 14px; padding: 32px 32px 24px; border-bottom: 1px solid var(--border); }
+    .cal-head-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .month-label { font-family: 'Lora', serif; font-size: 28px; font-weight: 600; line-height: 1.2; }
+    .year-label { font-size: 13px; color: var(--muted); margin-top: 3px; }
+    .filter-status-banner { background: var(--accent-bg); padding: 32px; text-align: center; border-bottom: 1px solid var(--border); }
+    .status-text { font-family: 'Lora', serif; font-size: 26px; font-weight: 600; color: var(--accent-dk); line-height: 1.2; }
+    .status-subtext { display: block; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--muted); margin-top: 6px; text-transform: uppercase; letter-spacing: .1em; }
+    .groups { padding: 32px; display: flex; flex-direction: column; gap: 24px; }
+    .day-card {
+      border: 1px solid var(--border); border-radius: 12px; background: var(--surface);
+      padding: 24px; box-shadow: 0 2px 4px rgba(48,33,10,.02);
+      transition: box-shadow .18s ease, transform .18s ease, border-color .18s ease;
+    }
+    .day-card:hover { box-shadow: var(--shadow-hover); border-color: #D9CEC0; transform: translateY(-2px); }
+    .day-card.is-today { border-color: #E8C9A0; border-left: 3px solid var(--accent); }
+    .day-card.has-multiple { border-left: 4px solid var(--accent); }
+    .multiple-badge { display: inline-block; background: var(--accent); color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-bottom: 6px; }
+    .today-badge { display: inline-block; background: #22C55E; color: white; font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; margin-bottom: 6px; margin-right: 4px; }
     .day-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; }
-    .day-left { display: flex; gap: 14px; min-width: 0; }
-    .day-badge { width: 62px; min-width: 62px; height: 62px; border-radius: 14px; background: var(--today-bg); border: 1px solid #E8C9A0; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; text-align: center; flex-shrink: 0; }
+    .day-left { display: flex; gap: 20px; min-width: 0; }
+    .day-badge { width: 68px; min-width: 68px; height: 68px; border-radius: 14px; background: var(--today-bg); border: 1px solid #E8C9A0; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1; text-align: center; flex-shrink: 0; }
     .day-number { font-family: 'Lora', serif; font-size: 22px; font-weight: 600; color: var(--accent-dk); }
-    .day-month { margin-top: 4px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .day-month { margin-top: 4px; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
     .day-meta { min-width: 0; padding-top: 2px; }
     .day-week { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
-    .day-summary { font-family: 'Lora', serif; font-size: 18px; font-weight: 600; color: var(--text); line-height: 1.28; margin-bottom: 8px; }
+    .day-summary { font-family: 'Lora', serif; font-size: 18px; font-weight: 600; line-height: 1.28; margin-bottom: 8px; }
     .day-summary small { display: block; font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 4px; }
-    .expand-btn { border: 1px solid var(--border); background: var(--accent-bg); color: var(--accent-dk); border-radius: 999px; padding: 9px 13px; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; transition: background .15s ease, transform .15s ease, border-color .15s ease; flex-shrink: 0; }
+    .expand-btn {
+      border: 1px solid var(--border); background: var(--accent-bg); color: var(--accent-dk);
+      border-radius: 999px; padding: 9px 13px; font: inherit; font-size: 12px; font-weight: 600;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+      transition: background .15s ease, transform .15s ease, border-color .15s ease; flex-shrink: 0;
+    }
     .expand-btn:hover { transform: translateY(-1px); border-color: #E0B87E; }
     .expand-btn .arrow { display: inline-block; transition: transform .15s ease; }
     .day-card.expanded .expand-btn .arrow { transform: rotate(180deg); }
     .day-events { display: none; margin-top: 14px; flex-direction: column; gap: 12px; }
     .day-card.expanded .day-events { display: flex; }
     .event-item { border: 1px solid var(--border); border-radius: 12px; background: var(--bg); padding: 14px; }
-    .event-title { font-size: 17px; font-weight: 600; color: var(--text); line-height: 1.35; }
+    .event-title { font-size: 17px; font-weight: 600; line-height: 1.35; }
     .event-time { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-bg); color: var(--accent-dk); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 999px; margin: 10px 0 12px; width: fit-content; }
     .event-desc { font-size: 14px; line-height: 1.75; color: #3E3930; white-space: pre-wrap; }
     .downloads-box { margin-top: 14px; background: var(--accent-bg); border: 1px solid #E8CBA8; border-radius: 12px; padding: 12px; }
-    .downloads-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .downloads-title { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
     .download-link { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--link); font-size: 13px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; background: #fff; transition: background .12s ease, transform .12s ease; }
     .download-link:last-child { margin-bottom: 0; }
     .download-link:hover { background: var(--bg); transform: translateY(-1px); }
-    .download-link .dl-icon { font-size: 14px; line-height: 1; }
     .empty-state { padding: 34px 20px 38px; text-align: center; color: var(--muted); }
     .empty-state .icon { font-size: 28px; margin-bottom: 8px; }
     .empty-state p { font-size: 13px; line-height: 1.6; max-width: 300px; margin: 0 auto; }
     footer { text-align: center; padding: 40px 20px; font-size: 12px; color: var(--muted); }
-    @media (max-width: 640px) {
-      header { padding: 16px; }
-      .expand-btn { width: fit-content; }
-      .cal-head-top { width: 100%; }
-      .results-meta { max-width: 100%; }
-      .month-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (max-width: 640px) { header { padding: 16px; } .month-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
 <body>
   <header>
     <div>
       <h1>Calendário Escolar</h1>
-      
+      <div class="subtitle">Visualização por data (lista)</div>
     </div>
-
-    <div style="display: flex; align-items: center; gap: 12px;">
+    <div style="display:flex;align-items:center;gap:12px;">
       <a href="index.html" class="btn-header-back">← Voltar ao Portal</a>
       <div class="filter-wrap">
-        <button type="button" class="filter-button" id="filter-button" aria-expanded="false" aria-controls="filter-popover">
+        <button type="button" class="filter-button" id="filter-button" aria-expanded="false">
           <span id="filter-button-label">Mês atual</span>
           <span class="caret">▾</span>
         </button>
-
-        <div class="filter-popover" id="filter-popover" role="menu" aria-label="Filtro por mês">
+        <div class="filter-popover" id="filter-popover">
           <h3>Selecionar mês</h3>
           <div class="month-grid" id="month-grid"></div>
-          
           <div class="filter-section-title">Dias da semana</div>
           <div class="weekday-grid" id="weekday-grid"></div>
-
           <div class="popover-footer">
             <button type="button" class="popover-action" id="clear-weekdays">Limpar</button>
             <button type="button" class="popover-action" id="close-filter">Fechar</button>
@@ -151,6 +177,20 @@
     </div>
   </header>
 
+  <!-- Today's events quick banner -->
+  <div class="today-banner" id="today-banner">
+    <div class="today-banner-inner" id="today-banner-inner">
+      <div class="today-banner-left">
+        <div class="today-dot"></div>
+        <div>
+          <div class="today-banner-text" id="today-banner-text">Você tem eventos hoje</div>
+          <div class="today-banner-sub" id="today-banner-sub">Clique para ver</div>
+        </div>
+      </div>
+      <div class="today-banner-arrow">↓</div>
+    </div>
+  </div>
+
   <main>
     <section class="cal-card">
       <div class="cal-head">
@@ -159,20 +199,14 @@
             <div class="month-label" id="month-label">—</div>
             <div class="year-label" id="year-label">—</div>
           </div>
-          <div class="results-meta" id="results-meta">Carregando eventos...</div>
         </div>
       </div>
-
       <div class="filter-status-banner" id="filter-status-banner">
         <div class="status-text" id="status-text">Carregando...</div>
         <div class="status-subtext" id="status-count">--</div>
       </div>
-
       <div class="groups" id="groups">
-        <div class="empty-state">
-          <div class="icon">⌛</div>
-          <p>Carregando eventos...</p>
-        </div>
+        <div class="empty-state"><div class="icon">⌛</div><p>Carregando eventos...</p></div>
       </div>
     </section>
   </main>
@@ -183,16 +217,15 @@
     const WEEKDAYS_FULL = ["Domingo","Segunda-feira","Terça-feira","Quarta-feira","Quinta-feira","Sexta-feira","Sábado"];
 
     const now = new Date();
+    const todayKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+
     const state = {
-      month: now.getMonth(),
-      year: now.getFullYear(),
-      expandedDays: new Set(),
-      selectedWeekdays: new Set(), // Começa vazio (significa "Todos" no código)
+      month: now.getMonth(), year: now.getFullYear(),
+      expandedDays: new Set(), selectedWeekdays: new Set(),
     };
 
     const monthLabel = document.getElementById('month-label');
     const yearLabel = document.getElementById('year-label');
-    const resultsMeta = document.getElementById('results-meta');
     const statusText = document.getElementById('status-text');
     const statusCount = document.getElementById('status-count');
     const groupsEl = document.getElementById('groups');
@@ -206,46 +239,28 @@
       const [y, m, d] = key.split('-').map(Number);
       return new Date(y, m - 1, d);
     }
-
     function formatLongDate(date) {
-      return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }).format(date);
+      return new Intl.DateTimeFormat('pt-BR', { day:'2-digit', month:'long', year:'numeric' }).format(date);
     }
-
     function escapeHtml(str) {
       return String(str ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
-
     function normalizeEvents(raw) {
       const items = [];
       if (!raw || typeof raw !== 'object') return items;
       for (const [date, value] of Object.entries(raw)) {
         const list = Array.isArray(value) ? value : [value];
-        list.forEach(ev => {
-          items.push({
-            date,
-            title: ev?.title ?? '',
-            time: ev?.time ?? '',
-            description: ev?.description ?? '',
-            downloads: Array.isArray(ev?.downloads) ? ev.downloads : []
-          });
-        });
+        list.forEach(ev => items.push({ date, title: ev?.title ?? '', time: ev?.time ?? '', description: ev?.description ?? '', downloads: Array.isArray(ev?.downloads) ? ev.downloads : [] }));
       }
       return items;
     }
-
     function sortTime(a, b) {
-      const ta = (a.time || '').trim();
-      const tb = (b.time || '').trim();
-      if (!ta && !tb) return 0;
-      if (!ta) return 1;
-      if (!tb) return -1;
+      const ta = (a.time||'').trim(), tb = (b.time||'').trim();
+      if (!ta && !tb) return 0; if (!ta) return 1; if (!tb) return -1;
       return ta.localeCompare(tb, 'pt-BR', { numeric: true });
     }
-
     function groupByDate(events) {
       const map = new Map();
       for (const ev of events) {
@@ -256,144 +271,102 @@
         .map(([date, items]) => ({ date, dateObj: keyToDate(date), items: [...items].sort(sortTime) }))
         .sort((a, b) => a.date.localeCompare(b.date));
     }
-
     function syncCurrentMonth(force = false) {
-      if (force) {
-        const d = new Date();
-        state.month = d.getMonth();
-        state.year = d.getFullYear();
-        state.expandedDays.clear();
-      }
+      if (force) { const d = new Date(); state.month = d.getMonth(); state.year = d.getFullYear(); state.expandedDays.clear(); }
     }
-    
     function buildMonthGrid() {
       monthGrid.innerHTML = '';
       MONTHS.forEach((name, index) => {
         const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'month-option';
-        btn.textContent = name;
-        btn.dataset.month = String(index);
-        btn.addEventListener('click', () => {
-          state.month = index; // Mantém o ano atual do estado
-          state.expandedDays.clear();
-          render();
-          closePopover();
-        });
+        btn.type = 'button'; btn.className = 'month-option'; btn.textContent = name; btn.dataset.month = String(index);
+        btn.addEventListener('click', () => { state.month = index; state.expandedDays.clear(); render(); closePopover(); });
         monthGrid.appendChild(btn);
       });
     }
-
     function buildWeekdayGrid() {
       weekdayGrid.innerHTML = '';
       WEEKDAYS_FULL.forEach((name, index) => {
         const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'weekday-option' + (state.selectedWeekdays.has(index) ? ' active' : '');
+        btn.type = 'button'; btn.className = 'weekday-option' + (state.selectedWeekdays.has(index) ? ' active' : '');
         btn.textContent = name.split('-')[0];
         btn.addEventListener('click', () => {
-          if (state.selectedWeekdays.has(index)) {
-            state.selectedWeekdays.delete(index);
-          } else {
-            state.selectedWeekdays.add(index);
-          }
+          if (state.selectedWeekdays.has(index)) state.selectedWeekdays.delete(index);
+          else state.selectedWeekdays.add(index);
           render();
         });
         weekdayGrid.appendChild(btn);
       });
     }
-
-    function openPopover() {
-      filterPopover.classList.add('open');
-      filterButton.setAttribute('aria-expanded', 'true');
-    }
-
-    function closePopover() {
-      filterPopover.classList.remove('open');
-      filterButton.setAttribute('aria-expanded', 'false');
-    }
-
-    function togglePopover() {
-      if (filterPopover.classList.contains('open')) closePopover();
-      else openPopover();
-    }
-
+    function openPopover() { filterPopover.classList.add('open'); filterButton.setAttribute('aria-expanded','true'); }
+    function closePopover() { filterPopover.classList.remove('open'); filterButton.setAttribute('aria-expanded','false'); }
+    function togglePopover() { filterPopover.classList.contains('open') ? closePopover() : openPopover(); }
     function renderDownloadBox(downloads) {
       if (!downloads || !downloads.length) return '';
-      return `
-        <div class="downloads-box">
-          <div class="downloads-title">🔗 Materiais e Links</div>
-          ${downloads.map(dl => {
-            const isExternal = dl.url.startsWith('http') || dl.type === 'link';
-            const icon = isExternal ? "🔗" : "⬇";
-            // Adiciona o atributo download se não for um link externo
-            const downloadAttr = isExternal ? '' : 'download';
-            return `
-              <a href="${escapeHtml(dl.url)}" ${downloadAttr} target="_blank" rel="noopener" class="download-link">
-                <span class="dl-icon">${icon}</span>
-                <span>${escapeHtml(dl.label)}</span>
-              </a>
-            `;
-          }).join('')}
-        </div>
-      `;
+      return `<div class="downloads-box"><div class="downloads-title">🔗 Materiais e Links</div>${downloads.map(dl => {
+        const isExternal = dl.url.startsWith('http') || dl.type === 'link';
+        return `<a href="${escapeHtml(dl.url)}" ${isExternal ? '' : 'download'} target="_blank" rel="noopener" class="download-link">
+          <span class="dl-icon">${isExternal ? '🔗' : '⬇'}</span><span>${escapeHtml(dl.label)}</span></a>`;
+      }).join('')}</div>`;
     }
-
     function renderEventDetails(ev) {
       const timeText = ev.time && String(ev.time).trim() ? String(ev.time).trim() : 'Horário não informado';
-      return `
-        <div class="event-item">
-          <div class="event-title">${escapeHtml(ev.title)}</div>
-          <div class="event-time">🕐 ${escapeHtml(timeText)}</div>
-          ${ev.description ? `<div class="event-desc">${escapeHtml(ev.description)}</div>` : ''}
-          ${renderDownloadBox(ev.downloads)}
-        </div>
-      `;
+      return `<div class="event-item">
+        <div class="event-title">${escapeHtml(ev.title)}</div>
+        <div class="event-time">🕐 ${escapeHtml(timeText)}</div>
+        ${ev.description ? `<div class="event-desc">${escapeHtml(ev.description)}</div>` : ''}
+        ${renderDownloadBox(ev.downloads)}
+      </div>`;
     }
-
     function setPanelInfo(filteredGroups, totalVisibleEvents) {
       const monthName = MONTHS[state.month];
       monthLabel.textContent = monthName;
       yearLabel.textContent = String(state.year);
       filterButtonLabel.textContent = `${monthName} ${state.year}`;
-
       if (!filteredGroups.length) {
-        resultsMeta.textContent = 'Nenhum evento encontrado para o mês selecionado.';
         statusText.textContent = 'Nenhum evento encontrado';
         statusCount.textContent = 'Tente selecionar outro mês ou dia';
       } else {
         if (state.selectedWeekdays.size === 0) {
-          resultsMeta.textContent = `Todos os Eventos (Total: ${totalVisibleEvents})`;
-          statusText.textContent = 'Filtro selecionado para todos os dias';
+          statusText.textContent = `${monthName} de ${state.year}`;
         } else {
-          const diasNomes = Array.from(state.selectedWeekdays)
-            .sort((a, b) => a - b)
-            .map(i => WEEKDAYS_FULL[i].split('-')[0].toLowerCase());
-          
-          const listaDias = diasNomes.length > 1 
-            ? diasNomes.slice(0, -1).join(', ') + ' e ' + diasNomes.slice(-1)
-            : diasNomes[0];
-
-          resultsMeta.textContent = `Eventos: ${listaDias} (Total: ${totalVisibleEvents})`;
-          statusText.textContent = `Filtro selecionado para ${listaDias}`;
+          const diasNomes = Array.from(state.selectedWeekdays).sort((a,b)=>a-b).map(i => WEEKDAYS_FULL[i].split('-')[0].toLowerCase());
+          const listaDias = diasNomes.length > 1 ? diasNomes.slice(0,-1).join(', ') + ' e ' + diasNomes.slice(-1) : diasNomes[0];
+          statusText.textContent = `${monthName} · ${listaDias}`;
         }
-        statusCount.textContent = `Total de atividades: ${totalVisibleEvents}`;
+        statusCount.textContent = `${totalVisibleEvents} ${totalVisibleEvents === 1 ? 'atividade' : 'atividades'}`;
       }
-      
-      if(monthGrid.children.length)
-        [...monthGrid.children].forEach(c => c.classList.toggle('active', Number(c.dataset.month) === state.month));
-
-      if(weekdayGrid.children.length) {
-        [...weekdayGrid.children].forEach((btn, i) => btn.classList.toggle('active', state.selectedWeekdays.has(i)));
-      }
+      if (monthGrid.children.length) [...monthGrid.children].forEach(c => c.classList.toggle('active', Number(c.dataset.month) === state.month));
+      if (weekdayGrid.children.length) [...weekdayGrid.children].forEach((btn, i) => btn.classList.toggle('active', state.selectedWeekdays.has(i)));
     }
 
     const allEvents = normalizeEvents(window.eventos || {});
     const grouped = groupByDate(allEvents);
 
+    // Check for today's events and show banner
+    const todayGroup = grouped.find(g => g.date === todayKey);
+    if (todayGroup && todayGroup.items.length > 0) {
+      const banner = document.getElementById('today-banner');
+      const bannerText = document.getElementById('today-banner-text');
+      const bannerSub = document.getElementById('today-banner-sub');
+      banner.classList.add('visible');
+      const count = todayGroup.items.length;
+      bannerText.textContent = `Você tem ${count} ${count === 1 ? 'evento' : 'eventos'} hoje`;
+      bannerSub.textContent = `${todayGroup.items.map(i => i.title).join(' · ')}`;
+      document.getElementById('today-banner-inner').addEventListener('click', () => {
+        // Navigate to today's month and scroll to it
+        state.month = now.getMonth();
+        state.year = now.getFullYear();
+        render();
+        setTimeout(() => {
+          const todayCard = document.querySelector('[data-today-card="true"]');
+          if (todayCard) todayCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
+      });
+    }
+
     function render() {
       const filteredGroups = grouped.filter(group =>
-        group.dateObj.getFullYear() === state.year && 
+        group.dateObj.getFullYear() === state.year &&
         group.dateObj.getMonth() === state.month &&
         (state.selectedWeekdays.size === 0 || state.selectedWeekdays.has(group.dateObj.getDay()))
       );
@@ -402,12 +375,7 @@
 
       groupsEl.innerHTML = '';
       if (!filteredGroups.length) {
-        groupsEl.innerHTML = `
-          <div class="empty-state">
-            <div class="icon">📅</div>
-            <p>Nenhum evento encontrado para este mês.</p>
-          </div>
-        `;
+        groupsEl.innerHTML = `<div class="empty-state"><div class="icon">📅</div><p>Nenhum evento encontrado para este mês.</p></div>`;
         return;
       }
 
@@ -417,11 +385,13 @@
         const weekday = WEEKDAYS_FULL[dateObj.getDay()];
         const monthShort = MONTHS[dateObj.getMonth()].slice(0, 3);
         const isMultiple = group.items.length > 1;
+        const isToday = group.date === todayKey;
         const expanded = state.expandedDays.has(group.date);
         const mainTitle = isMultiple ? `${group.items.length} eventos para este dia` : group.items[0].title;
 
         const card = document.createElement('article');
-        card.className = `day-card ${expanded ? 'expanded' : ''} ${isMultiple ? 'has-multiple' : ''}`;
+        card.className = `day-card ${expanded ? 'expanded' : ''} ${isMultiple ? 'has-multiple' : ''} ${isToday ? 'is-today' : ''}`;
+        if (isToday) card.setAttribute('data-today-card', 'true');
         card.innerHTML = `
           <div class="day-header">
             <div class="day-left">
@@ -431,23 +401,16 @@
               </div>
               <div class="day-meta">
                 <div class="day-week">${weekday}</div>
-                ${isMultiple ? `<span class="multiple-badge">Múltiplas atividades</span>` : ''}
-                <div class="day-summary">${escapeHtml(mainTitle)}
-                  <small>${formatLongDate(dateObj)}</small>
-                </div>
+                ${isToday ? '<span class="today-badge">hoje</span>' : ''}
+                ${isMultiple ? '<span class="multiple-badge">Múltiplas atividades</span>' : ''}
+                <div class="day-summary">${escapeHtml(mainTitle)}<small>${formatLongDate(dateObj)}</small></div>
               </div>
             </div>
-            ${isMultiple ? `
-              <button type="button" class="expand-btn" data-date="${group.date}" aria-expanded="${expanded ? 'true' : 'false'}">
-                <span>${expanded ? 'recolher' : 'expandir'}</span>
-                <span class="arrow">▾</span>
-              </button>
-            ` : ''}
+            ${isMultiple ? `<button type="button" class="expand-btn" data-date="${group.date}" aria-expanded="${expanded}">
+              <span>${expanded ? 'recolher' : 'expandir'}</span><span class="arrow">▾</span>
+            </button>` : ''}
           </div>
-          <div class="day-events">
-            ${group.items.map(renderEventDetails).join('')}
-          </div>
-        `;
+          <div class="day-events">${group.items.map(renderEventDetails).join('')}</div>`;
 
         if (isMultiple) {
           const btn = card.querySelector('.expand-btn');
@@ -456,22 +419,17 @@
             else state.expandedDays.add(group.date);
             render();
           });
-          if (expanded) card.classList.add('expanded');
         } else {
           card.querySelector('.day-events').style.display = 'flex';
         }
-
         groupsEl.appendChild(card);
       });
     }
 
     filterButton.addEventListener('click', togglePopover);
     document.getElementById('close-filter').addEventListener('click', closePopover);
-    document.getElementById('clear-weekdays').addEventListener('click', () => {
-      state.selectedWeekdays.clear();
-      render();
-    });
-    document.addEventListener('click', (event) => {
+    document.getElementById('clear-weekdays').addEventListener('click', () => { state.selectedWeekdays.clear(); render(); });
+    document.addEventListener('click', event => {
       if (!filterPopover.contains(event.target) && !filterButton.contains(event.target)) closePopover();
     });
 
@@ -481,9 +439,7 @@
 
     setInterval(() => {
       const d = new Date();
-      if (d.getMonth() !== state.month && state.year === d.getFullYear()) {
-        syncCurrentMonth(true); render();
-      }
+      if (d.getMonth() !== state.month && state.year === d.getFullYear()) { syncCurrentMonth(true); render(); }
     }, 60 * 60 * 1000);
   </script>
 </body>
