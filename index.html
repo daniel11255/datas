@@ -110,6 +110,16 @@
             width: 100%;
             max-width: 580px;
         }
+        .card.full-width {
+            grid-column: 1 / -1;
+            flex-direction: row;
+            align-items: center;
+            padding: 20px 24px;
+            gap: 20px;
+        }
+        .card.full-width .card-icon { flex-shrink: 0; }
+        .card.full-width .card-content { flex: 1; }
+        .card.full-width .card-footer { margin-top: 0; }
         .card {
             background: var(--surface);
             border-radius: var(--radius);
@@ -219,7 +229,7 @@
             </div>
             <div>
                 <p class="card-title">Horários de Aulas</p>
-                <p class="card-desc">Visualize a grade semanal de disciplinas.</p>
+                <p class="card-desc">Grade semanal de disciplinas.</p>
             </div>
             <div class="card-footer">Acessar <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
         </a>
@@ -229,13 +239,24 @@
             </div>
             <div>
                 <p class="card-title">Calendário</p>
-                <p class="card-desc">Provas, atividades e eventos da turma.</p>
+                <p class="card-desc">Provas, atividades e eventos.</p>
             </div>
             <div class="card-footer">Escolher exibição <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
         </div>
+
+        <!-- Bus Card (full-width) -->
+        <a href="onibus.html" class="card full-width" id="bus-card">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8h10M7 11h5"/></svg>
+            </div>
+            <div class="card-content">
+                <p class="card-title">Horários de Ônibus</p>
+                <p class="card-desc">Linhas de Onibus. (Terminal ⇆ Shopping.)</p>
+            </div>
+            <div class="card-footer">Acessar <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+        </a>
     </div>
 
-    <p class="footer">1INFO-2 · Portal da Turma</p>
 
     <!-- Modal -->
     <div class="modal-overlay" id="calendarModal">
