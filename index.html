@@ -1,27 +1,427 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Page</title>
+    <title>Portal | 1INFO-2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="eventos.js"></script>
     <style>
+        :root {
+            --bg: #FBF8F3;
+            --surface: #FFFFFF;
+            --surface-alt: #F9F5EE;
+            --border: #E8DCCB;
+            --accent: #C8A87A;
+            --accent-dark: #9A7550;
+            --time-bg: #F0E6CC;
+            --time-text: #7A5C2E;
+            --cell-text: #4A3728;
+            --muted: #B8A898;
+            --radius: 16px;
+            --shadow: 0 4px 24px rgba(120,80,30,.10), 0 1px 4px rgba(120,80,30,.06);
+            --shadow-hover: 0 8px 32px rgba(120,80,30,.16), 0 2px 8px rgba(120,80,30,.10);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            font-family: Arial, sans-serif;
-            transition: background 0.5s ease;
+            background: var(--bg);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem 1.5rem;
+            gap: 0;
         }
-        h1 {
-            text-align: center;
-            margin-top: 20%;
+
+        /* ── Logo ── */
+        .logo-area { text-align: center; margin-bottom: 2rem; }
+        .logo-icon {
+            width: 52px; height: 52px;
+            background: var(--accent);
+            border-radius: 14px;
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 16px rgba(200,168,122,.35);
         }
-        p {
+        .logo-icon svg { width: 26px; height: 26px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .logo-title { font-family: 'Lora', serif; font-size: 26px; font-weight: 600; color: var(--cell-text); letter-spacing: -0.03em; margin-bottom: 6px; }
+        .logo-subtitle { font-size: 14px; color: var(--muted); }
+
+        /* ── Info Strips (Classes & Events) ── */
+        .info-strip {
+            background: var(--time-bg);
+            border: 1px solid #E2CBA0;
+            border-radius: var(--radius);
+            padding: 20px;
+            width: 100%;
+            max-width: 580px;
+            margin-bottom: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        /* ── Next Class Pill ── */
+        .next-class-pill {
+            transition: background .3s, border-color .3s;
+        }
+        .next-class-pill.live-pulse {
+            background: rgba(34,197,94,.08);
+            border-color: rgba(34,197,94,.3);
+        }
+        .next-class-label {
+            font-size: 13px;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .next-class-name { font-weight: 600; font-size: 20px; color: var(--time-text); }
+        .next-class-time { font-size: 15px; color: var(--muted); margin-top: 5px; }
+
+        .status-dot {
+            width: 9px; height: 9px; border-radius: 50%;
+            display: inline-block; flex-shrink: 0;
+        }
+        .status-dot.live {
+            background: #22C55E;
+            box-shadow: 0 0 0 3px rgba(34,197,94,.25);
+            animation: blink 1.6s ease-in-out infinite;
+        }
+        .status-dot.next { background: var(--accent); }
+        .status-dot.off { background: var(--muted); }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+        /* ── Grid ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            width: 100%;
+            max-width: 580px;
+        }
+        .card.full-width {
+            grid-column: 1 / -1;
+            flex-direction: row;
+            align-items: center;
+            padding: 20px 24px;
+            gap: 20px;
+        }
+        .card.full-width .card-icon { flex-shrink: 0; }
+        .card.full-width .card-content { flex: 1; }
+        .card.full-width .card-footer { margin-top: 0; }
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            text-decoration: none;
+            color: inherit;
+            padding: 28px 24px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--accent);
+            opacity: 0;
+            transition: opacity .18s ease;
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: #D4B896; }
+        .card:hover::before { opacity: 1; }
+        .card-icon {
+            width: 44px; height: 44px;
+            background: var(--time-bg);
+            border-radius: 11px;
+            border: 1px solid #E2CBA0;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .card-icon svg { width: 22px; height: 22px; fill: none; stroke: var(--accent-dark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .card-title { font-size: 16px; font-weight: 600; color: var(--cell-text); margin-bottom: 6px; letter-spacing: -0.02em; }
+        .card-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+        .card-footer { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--accent-dark); letter-spacing: 0.03em; text-transform: uppercase; margin-top: auto; }
+        .card-footer svg { width: 14px; height: 14px; fill: none; stroke: var(--accent-dark); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; transition: transform .15s ease; }
+        .card:hover .card-footer svg { transform: translateX(3px); }
+
+        /* ── Modal ── */
+        .modal-overlay {
+            position: fixed; top:0; left:0; right:0; bottom:0;
+            background: rgba(74,55,40,.4);
+            backdrop-filter: blur(4px);
+            display: none; align-items: center; justify-content: center;
+            z-index: 100; padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-card {
+            background: var(--surface); border-radius: var(--radius);
+            width: 100%; max-width: 400px;
+            padding: 32px; box-shadow: var(--shadow-hover); text-align: center;
+        }
+        .modal-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 600; color: var(--cell-text); margin-bottom: 24px; }
+        .modal-options { display: flex; flex-direction: column; gap: 12px; }
+        .modal-btn {
+            background: var(--surface-alt); border: 1px solid var(--border);
+            padding: 16px; border-radius: 12px; text-decoration: none;
+            color: var(--cell-text); font-weight: 600; transition: all .2s ease; display: block;
+            font-family: inherit; font-size: 15px; cursor: pointer;
+        }
+        .modal-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+        .modal-close { margin-top: 20px; font-size: 13px; color: var(--muted); cursor: pointer; background: none; border: none; font-family: inherit; }
+
+        .footer { margin-top: 2.5rem; font-size: 12px; color: var(--muted); }
+
+        @media (max-width: 640px) {
+            .grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to My Modern Gradient Page</h1>
-    <p>This page features a modern gradient design while preserving all functionalities.</p>
+
+    <div class="logo-area">
+        <div class="logo-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h1 class="logo-title">Portal | 1INFO-2</h1>
+        <p class="logo-subtitle">Selecione uma área para continuar</p>
+    </div>
+
+    <!-- Class Warning -->
+    <div class="info-strip">
+        <div class="next-class-pill" id="next-pill">
+            <div class="next-class-label" id="next-label">—</div>
+            <div class="next-class-name" id="next-name">—</div>
+            <div class="next-class-time" id="next-time">—</div>
+        </div>
+    </div>
+
+    <!-- Event Warning -->
+    <div class="info-strip" id="event-container" style="display: none; margin-top: -10px; margin-bottom: 22px; background: #fdfaf0;">
+        <div class="next-class-pill">
+            <div class="next-class-label"><span class="status-dot next"></span><span id="event-type-label">Próximo Evento</span></div>
+            <div class="next-class-name" id="event-title">—</div>
+            <div class="next-class-time" id="event-details">—</div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <a href="aulas.html" class="card">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div>
+                <p class="card-title">Horários de Aulas</p>
+                <p class="card-desc">Grade semanal de disciplinas.</p>
+            </div>
+            <div class="card-footer">Acessar <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+        </a>
+        <div class="card" onclick="openCalendarModal()">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24"><path d="M19 4H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            </div>
+            <div>
+                <p class="card-title">Calendário</p>
+                <p class="card-desc">Provas, atividades e eventos.</p>
+            </div>
+            <div class="card-footer">Escolher exibição <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+        </div>
+
+        <!-- Bus Card (full-width) -->
+        <a href="onibus.html" class="card full-width" id="bus-card">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 8h10M7 11h5"/></svg>
+            </div>
+            <div class="card-content">
+                <p class="card-title">Horários de Ônibus</p>
+                <p class="card-desc">Linhas de Onibus. (Terminal ⇆ Shopping.)</p>
+            </div>
+            <div class="card-footer">Acessar <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+        </a>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="calendarModal">
+        <div class="modal-card">
+            <h2 class="modal-title">Como deseja visualizar?</h2>
+            <div class="modal-options">
+                <a href="mes.html" class="modal-btn">📅 Visualização por Mês</a>
+                <a href="data.html" class="modal-btn">📋 Visualização por Data (Lista)</a>
+            </div>
+            <button class="modal-close" onclick="closeCalendarModal()">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        // ── Schedule embedded for smart widget ──
+        const SCHEDULE = {
+            1: [ // Segunda-feira
+                { start: '12:35', end: '14:15', code: 'ARQART1', label: 'Artes 1' },
+                { start: '14:25', end: '16:05', code: 'ARQGEO1', label: 'Geometria 1' },
+                { start: '16:20', end: '18:00', code: 'ARQMAT1', label: 'Matemática 1' },
+            ],
+            2: [ // Terça-feira
+                { start: '12:35', end: '14:15', code: 'ARQINCP', label: 'Intro. Computação' },
+                { start: '14:25', end: '16:05', code: 'ARQING1', label: 'Inglês 1' },
+                { start: '16:20', end: '18:00', code: 'ARQFIS1', label: 'Física 1' },
+            ],
+            3: [ // Quarta-feira
+                { start: '14:25', end: '16:05', code: 'ARQEFI1', label: 'Ed. Física 1' },
+                { start: '16:20', end: '18:00', code: 'ARQFIL1', label: 'Filosofia 1' },
+            ],
+            4: [ // Quinta-feira
+                { start: '12:35', end: '14:15', code: 'ARQLPR1', label: 'Lab. Prog. 1' },
+                { start: '14:25', end: '16:05', code: 'ARQIWB1', label: 'Internet/Web 1' },
+            ],
+            5: [ // Sexta-feira
+                { start: '12:35', end: '16:05', code: 'ARQPROG', label: 'Programação' },
+                { start: '16:20', end: '18:00', code: 'ARQMAT1', label: 'Matemática 1' },
+            ],
+        };
+
+        const DAYS_PT = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+        const MONTHS_PT = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+
+        function toMins(t) {
+            const [h, m] = t.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        function getClassStatus() {
+            const now = new Date();
+            const dow = now.getDay();
+            const mins = now.getHours() * 60 + now.getMinutes();
+            const todayClasses = SCHEDULE[dow] || [];
+
+            // In class right now?
+            for (const cls of todayClasses) {
+                if (mins >= toMins(cls.start) && mins < toMins(cls.end)) {
+                    return { status: 'live', cls, dow };
+                }
+            }
+            // Next class today
+            for (const cls of todayClasses) {
+                if (toMins(cls.start) > mins) {
+                    return { status: 'next-today', cls, dow };
+                }
+            }
+            // Next class on another day
+            for (let i = 1; i <= 7; i++) {
+                const nextDow = (dow + i) % 7;
+                const classes = SCHEDULE[nextDow];
+                if (classes && classes.length > 0) {
+                    return { status: 'next-day', cls: classes[0], dow: nextDow };
+                }
+            }
+            return null;
+        }
+
+        function updateUI() {
+            const now = new Date();
+
+            const pill = document.getElementById('next-pill');
+            const label = document.getElementById('next-label');
+            const name = document.getElementById('next-name');
+            const time = document.getElementById('next-time');
+            const status = getClassStatus();
+
+            if (!status) {
+                label.innerHTML = '<span class="status-dot off"></span>Sem aulas';
+                name.textContent = 'Nenhuma aula prevista';
+                time.textContent = '';
+                pill.classList.remove('live-pulse');
+                return;
+            }
+
+            if (status.status === 'live') {
+                label.innerHTML = '<span class="status-dot live"></span>Em aula agora';
+                name.textContent = status.cls.label;
+                time.textContent = `${status.cls.start} – ${status.cls.end}`;
+                pill.classList.add('live-pulse');
+            } else if (status.status === 'next-today') {
+                label.innerHTML = '<span class="status-dot next"></span>Próxima aula';
+                name.textContent = status.cls.label;
+                time.textContent = `Hoje às ${status.cls.start}`;
+                pill.classList.remove('live-pulse');
+            } else {
+                label.innerHTML = '<span class="status-dot off"></span>Próxima aula';
+                name.textContent = status.cls.label;
+                time.textContent = `${DAYS_PT[status.dow].split('-')[0]} às ${status.cls.start}`;
+                pill.classList.remove('live-pulse');
+            }
+        }
+
+        function updateEvents() {
+            if (!window.eventos) return;
+            
+            const now = new Date();
+            const todayStr = now.getFullYear() + '-' + 
+                             String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                             String(now.getDate()).padStart(2, '0');
+
+            const eventDates = Object.keys(window.eventos).sort();
+            let nextDate = null;
+
+            for (const date of eventDates) {
+                if (date >= todayStr) {
+                    nextDate = date;
+                    break;
+                }
+            }
+
+            const container = document.getElementById('event-container');
+            if (nextDate) {
+                const event = window.eventos[nextDate][0];
+                const titleEl = document.getElementById('event-title');
+                const labelTextEl = document.getElementById('event-type-label');
+                const detailsEl = document.getElementById('event-details');
+                
+                // Formatar data para exibição
+                let displayDate;
+                if (nextDate === todayStr) {
+                    displayDate = "Hoje";
+                } else {
+                    const [y, m, d] = nextDate.split('-');
+                    displayDate = `${parseInt(d)} de ${MONTHS_PT[parseInt(m)-1]}`;
+                }
+                if (window.getEventCategory) labelTextEl.textContent = window.getEventCategory(event);
+
+                titleEl.textContent = event.title;
+                detailsEl.textContent = `${displayDate} · ${event.time}`;
+                container.style.display = 'flex';
+            } else {
+                container.style.display = 'none';
+            }
+        }
+
+        updateUI();
+        updateEvents();
+        setInterval(updateUI, 15000);
+        setInterval(updateEvents, 60000); // Atualiza eventos a cada minuto
+
+        function openCalendarModal() { document.getElementById('calendarModal').classList.add('active'); }
+        function closeCalendarModal() { document.getElementById('calendarModal').classList.remove('active'); }
+        window.onclick = e => {
+            if (e.target === document.getElementById('calendarModal')) closeCalendarModal();
+        };
+    </script>
 </body>
 </html>
